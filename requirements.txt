@@ -1,6 +1,6 @@
 
 # external requirements
-os
+
 pandas
 numpy
 datetime

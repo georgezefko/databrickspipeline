@@ -10,10 +10,9 @@ blob = os.getenv("BLOB")
 key = os.getenv("KEY")
 scope = os.getenv("SCOPE")
 
-def mount():
-    blob_account_name = 'experimentaldata'
-    blob_container_name = 'bookings'
-    blob_access_key = dbutils.secrets.get(scope="intellishore",key="storage")
+def mount(blob_account_name,blob_container_name,scope,key):
+    
+    blob_access_key = dbutils.secrets.get(scope=scope,key=key)
 
     # already mounted
     dbutils.fs.mount(

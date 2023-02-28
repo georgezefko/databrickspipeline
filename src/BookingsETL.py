@@ -4,7 +4,9 @@ from pyspark.sql.functions import col, isnan, count,round
 from datetime import datetime
 import pandas as pd
 import logging
-from utils import DataPreprocessor
+import os
+from dotenv import load_dotenv
+from utils.utils import DataPreprocessor
 # create logger object
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -22,11 +24,20 @@ ch.setFormatter(formatter)
 # add console handler to logger
 logger.addHandler(ch)
 
+# load variables from .env file
+load_dotenv()
+
+# get variable values
+account = os.getenv("ACCOUNT")
+blob = os.getenv("BLOB")
+key = os.getenv("KEY")
+scope = os.getenv("SCOPE")
+
 # COMMAND ----------
 
-blob_account_name = 'experimentaldata'
-blob_container_name = 'bookings'
-blob_access_key = dbutils.secrets.get(scope="intellishore",key="storage")
+blob_account_name = account
+blob_container_name = blob
+blob_access_key = dbutils.secrets.get(scope=scope,key=key)
 
 # COMMAND ----------
 
@@ -230,23 +241,7 @@ no_duplicates.write.format("delta").mode("overwrite").option("mergeSchema", "tru
 
 # COMMAND ----------
 
-database_name = "gold"
-logger.info(f'Quality check on {database_name} tables')
-tables = spark.catalog.listTables(database_name)
-# print the table names
-for table in tables:
-    
-    logger.info(f'Quality check on {table.name} table')
-    
-    # read the table into a DataFrame
-    df = spark.table(f'{database_name}.{table.name}')
-    
-    # Get null report
-    m_above,m_below = preprocessor.get_nulls(df,threshold=0)
-    preprocessor.null_status(0,m_above,m_below)
-    
-    #check and remove duplicates
-    m_duplicates = preprocessor.check_duplicates(df)
+preprocessor.db_quality_check('gold')
 
 # COMMAND ----------
 

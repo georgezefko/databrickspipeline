@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install python-dotenv
+
 
 # COMMAND ----------
 
@@ -8,34 +8,7 @@ from pyspark.sql.functions import col, isnan, count,round
 from datetime import datetime
 import pandas as pd
 import logging
-import os
-from dotenv import load_dotenv
 from utils.utils import DataPreprocessor
-# create logger object
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-# create console handler and set level to INFO
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-
-# create formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-# add formatter to console handler
-ch.setFormatter(formatter)
-
-# add console handler to logger
-logger.addHandler(ch)
-
-# load variables from .env file
-load_dotenv('/Workspace/Repos/s151074@dtu.dk/databrickspipeline/.env')
-
-# get variable values
-account = os.getenv("ACCOUNT")
-blob = os.getenv("BLOB")
-key = os.getenv("KEY")
-scope = os.getenv("SCOPE")
 
 # COMMAND ----------
 

@@ -1,11 +1,9 @@
-# local package
--e .
 
 # external requirements
-flake8
-pillow
+os
 pandas
 numpy
 datetime
 pyspark
 python-dotenv
+dbutils

@@ -103,3 +103,22 @@ class DataPreprocessor:
         else:
             self.logger.info('Dataset has no duplicates')
             return df
+        
+    def db_quality_check(self,database_name):
+        database_name = "gold"
+        logger.info(f'Quality check on {database_name} tables')
+        tables = spark.catalog.listTables(database_name)
+        # print the table names
+        for table in tables:
+
+            logger.info(f'Quality check on {table.name} table')
+
+            # read the table into a DataFrame
+            df = spark.table(f'{database_name}.{table.name}')
+
+            # Get null report
+            m_above,m_below = preprocessor.get_nulls(df,threshold=0)
+            preprocessor.null_status(0,m_above,m_below)
+
+            #check and remove duplicates
+            m_duplicates = preprocessor.check_duplicates(df)

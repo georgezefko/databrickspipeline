@@ -1,4 +1,8 @@
 # Databricks notebook source
+# MAGIC %pip install python-dotenv
+
+# COMMAND ----------
+
 from pyspark.sql.functions import *
 from pyspark.sql.functions import col, isnan, count,round
 from datetime import datetime
@@ -25,19 +29,13 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 # load variables from .env file
-load_dotenv()
+load_dotenv('/Workspace/Repos/s151074@dtu.dk/databrickspipeline/.env')
 
 # get variable values
 account = os.getenv("ACCOUNT")
 blob = os.getenv("BLOB")
 key = os.getenv("KEY")
 scope = os.getenv("SCOPE")
-
-# COMMAND ----------
-
-blob_account_name = account
-blob_container_name = blob
-blob_access_key = dbutils.secrets.get(scope=scope,key=key)
 
 # COMMAND ----------
 
@@ -241,6 +239,7 @@ no_duplicates.write.format("delta").mode("overwrite").option("mergeSchema", "tru
 
 # COMMAND ----------
 
+# Run quality checks on gold tables
 preprocessor.db_quality_check('gold')
 
 # COMMAND ----------

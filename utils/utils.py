@@ -1,5 +1,6 @@
 import logging
 from pyspark.sql.functions import col, count, when
+from pyspark.sql import SparkSession
 
 # create logger object
 logger = logging.getLogger(__name__)
@@ -18,6 +19,8 @@ ch.setFormatter(formatter)
 # add console handler to logger
 logger.addHandler(ch)
 
+
+
 class DataPreprocessor:
     """
     A class that contains the basic preprocessing steps for data cleaning
@@ -28,6 +31,7 @@ class DataPreprocessor:
         self.df = df
         self.threshold = threshold
         self.logger = logging.getLogger(__name__)
+        self.spark = SparkSession.builder.appName("dataQuality").getOrCreate()
     
     def count_rows(self,df):
         """
@@ -198,14 +202,14 @@ class DataPreprocessor:
         """
         
         self.logger.info(f'Quality check on {database_name} tables')
-        tables = spark.catalog.listTables(database_name)
+        tables = self.spark.catalog.listTables(database_name)
         # print the table names
         for table in tables:
 
             self.logger.info(f'Quality check on {table.name} table')
 
             # read the table into a DataFrame
-            df = spark.table(f'{database_name}.{table.name}')
+            df = self.spark.table(f'{database_name}.{table.name}')
 
             # Get null report
             m_above,m_below = self.get_nulls(df,threshold=0)

@@ -6,7 +6,7 @@ The utils folder contains all the helper functions to support connections on dat
 The databases folder contains the table used to store the data in the corresponding databases
 Lastly the test folder contain an example of tests that could be used later on in the project.
 
-The source data used for the demo found here [https://www.kaggle.com/datasets/promptcloud/hotel-listings-2019](Hotel Listings 2019).
+The source data used for the demo found here [Hotel Listings 2019](https://www.kaggle.com/datasets/promptcloud/hotel-listings-2019).
 With small adjustments other datasets can be used too.
 
 

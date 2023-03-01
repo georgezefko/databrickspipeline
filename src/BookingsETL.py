@@ -106,6 +106,11 @@ no_duplicates.write.format("delta").mode("overwrite").option("mergeSchema", "tru
 
 # COMMAND ----------
 
+# Data quality check on silver tables
+preprocessor.db_quality_check('silver')
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC -- what was the total income of hotels based on bookings they had in 2019
 # MAGIC WITH rev AS (
